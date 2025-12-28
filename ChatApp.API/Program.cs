@@ -4,6 +4,8 @@ using ChatApp.Application.Features.ChatRequests.Commands.SendChatRequest;
 using ChatApp.Application.Interfaces;
 using ChatApp.Infrastructure;
 using ChatApp.Infrastructure.Identity;
+using ChatApp.Infrastructure.SignalR;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -15,6 +17,7 @@ builder.Services.AddMediatR(cfg =>
 cfg.RegisterServicesFromAssembly(typeof(SendChatRequestCommand).Assembly));
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IChatRequestNotifier, ChatRequestSignalRNotifier>();
+builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDev", policy =>

@@ -1,4 +1,5 @@
-﻿using ChatApp.Domain.Entities;
+﻿using ChatApp.Application.Features.ChatRequests.Commands.IncomingChatRequest;
+using ChatApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace ChatApp.Application.Interfaces
         Task<bool> ExistsPendingAsync(string fromUserId, string toUserId);
         Task AddAsync(ChatRequest request);
         Task<ChatRequest?> GetByIdAsync(long id);
+        Task<List<IncomingChatRequestDto>> GetIncomingAsync(
+       string toUserId,
+       CancellationToken ct);
         Task SaveChangesAsync();
     }
 }

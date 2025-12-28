@@ -1,4 +1,5 @@
-﻿using ChatApp.Application.Features.ChatRequests.Commands.SendChatRequest;
+﻿using ChatApp.Application.Features.ChatRequests.Commands.IncomingChatRequest;
+using ChatApp.Application.Features.ChatRequests.Commands.SendChatRequest;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,5 +30,12 @@ public class ChatRequestsController : ControllerBase
             new RespondChatRequestCommand(id, accept));
 
         return Ok(new { chatId });
+    }
+
+    [HttpGet("incoming")]
+    public async Task<IActionResult> Incoming()
+    {
+        var res = await _mediator.Send(new GetIncomingChatRequestsQuery());
+        return Ok(res);
     }
 }

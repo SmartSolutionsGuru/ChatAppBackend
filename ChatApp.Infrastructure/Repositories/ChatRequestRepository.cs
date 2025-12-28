@@ -1,4 +1,5 @@
-﻿using ChatApp.Application.Interfaces;
+﻿using ChatApp.Application.Features.ChatRequests.Commands.IncomingChatRequest;
+using ChatApp.Application.Interfaces;
 using ChatApp.Domain.Entities;
 using ChatApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,26 @@ namespace ChatApp.Infrastructure.Repositories
 
         public Task SaveChangesAsync()
             => _db.SaveChangesAsync();
+
+        public async Task<List<IncomingChatRequestDto>> GetIncomingAsync(
+     string toUserId,
+     CancellationToken ct)
+        {
+            return await (
+                from r in _db.ChatRequests
+                join u in _db.Users
+                    on r.FromUserId equals u.Id
+                where
+                    r.ToUserId == toUserId &&
+                    r.Status == ChatRequestStatus.Pending
+                orderby r.CreatedAt descending
+                select new IncomingChatRequestDto(
+                    r.Id,
+                    r.FromUserId,
+                    u.UserName!
+                )
+            ).ToListAsync(ct);
+        }
     }
 
 }
