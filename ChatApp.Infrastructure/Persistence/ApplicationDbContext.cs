@@ -62,6 +62,8 @@ namespace ChatApp.Infrastructure.Persistence
                 e.Property(x => x.Token).IsRequired().HasMaxLength(200);
                 e.HasIndex(x => x.Token).IsUnique();
             });
+
+
         }
     }
 }

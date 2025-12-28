@@ -40,10 +40,12 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IChatRequestRepository, ChatRequestRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IChatReadRepository, ChatReadRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
-
+        services.AddScoped<IUserSearchRepository, UserSearchRepository>();
         return services;
     }
 }
