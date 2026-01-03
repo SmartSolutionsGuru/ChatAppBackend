@@ -1,5 +1,6 @@
 ﻿using ChatApp.Application.Features.Chat.Queries.GetChatMessages;
 using ChatApp.Application.Interfaces;
+using ChatApp.Domain.Entities;
 using ChatApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,6 +35,30 @@ namespace ChatApp.Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<List<Message>> GetUnreadMessagesAsync(
+    long chatId,
+    string readerId)
+        {
+            return await _db.Messages
+                .Where(m =>
+                    m.ChatId == chatId &&
+                    m.ReceiverId == readerId &&
+                    m.Status != MessageStatus.Read)
+                .ToListAsync();
+        }
+
+
+        public Task<Message?> GetByIdAsync(long id)
+        {
+            return _db.Messages.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task AddAsync(Message message)
+       => await _db.Messages.AddAsync(message);
+
+        public Task SaveChangesAsync()
+            => _db.SaveChangesAsync();
     }
 
 }

@@ -10,5 +10,7 @@ namespace ChatApp.Infrastructure.Identity
     public class ApplicationUser : IdentityUser
     {
         public string? DisplayName { get; set; }
+        public DateTime? LastSeenAt { get; set; }
+
     }
 }

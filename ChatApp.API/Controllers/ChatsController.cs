@@ -1,5 +1,6 @@
 ﻿using ChatApp.Application.Features.Chat.Queries.GetChatMessages;
 using ChatApp.Application.Features.Chat.Queries.GetMyChats;
+using ChatApp.Application.Features.Chat.Queries.SendMessage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,13 @@ namespace ChatApp.API.Controllers
                 new GetChatMessagesQuery(chatId));
 
             return Ok(messages);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Send(SendMessageCommand cmd)
+        {
+            var id = await _mediator.Send(cmd);
+            return Ok(new { messageId = id });
         }
 
     }

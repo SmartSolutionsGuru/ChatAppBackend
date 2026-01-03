@@ -1,10 +1,12 @@
 using ChatApp.API.Extensions;
 using ChatApp.API.Notifiers;
+using ChatApp.API.Presence;
 using ChatApp.Application.Features.ChatRequests.Commands.SendChatRequest;
 using ChatApp.Application.Interfaces;
 using ChatApp.Infrastructure;
 using ChatApp.Infrastructure.Identity;
 using ChatApp.Infrastructure.SignalR;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +18,9 @@ builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddMediatR(cfg =>
 cfg.RegisterServicesFromAssembly(typeof(SendChatRequestCommand).Assembly));
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<UserConnectionTracker>();
 builder.Services.AddScoped<IChatRequestNotifier, ChatRequestSignalRNotifier>();
+builder.Services.AddScoped<IMessageNotifier, MessageSignalRNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
 builder.Services.AddCors(options =>
 {

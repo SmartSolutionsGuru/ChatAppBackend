@@ -1,4 +1,5 @@
 ﻿using ChatApp.Application.Features.Chat.Queries.GetChatMessages;
+using ChatApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,10 @@ namespace ChatApp.Application.Interfaces
         Task<List<MessageDto>> GetChatMessagesAsync(
             long chatId,
             string userId);
+
+        Task<Message?> GetByIdAsync(long id);
+        Task AddAsync(Message message);
+        Task SaveChangesAsync();
+        Task<List<Message>> GetUnreadMessagesAsync(long chatId, string readerId);
     }
 }

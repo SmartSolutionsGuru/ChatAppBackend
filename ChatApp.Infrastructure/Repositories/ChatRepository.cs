@@ -39,6 +39,10 @@ namespace ChatApp.Infrastructure.Repositories
             return chat;
         }
 
+        public Task<Chat?> GetByIdAsync(long chatId)
+        {
+            return _db.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
+        }
         public Task SaveChangesAsync()
             => _db.SaveChangesAsync();
     }

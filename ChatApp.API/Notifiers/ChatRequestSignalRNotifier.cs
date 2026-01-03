@@ -1,5 +1,6 @@
 ﻿using ChatApp.API.Hubs;
 using ChatApp.Application.Interfaces;
+using ChatApp.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.API.Notifiers
@@ -24,5 +25,9 @@ namespace ChatApp.API.Notifiers
         public Task NotifyRequestRejected(string fromUserId)
             => _hub.Clients.User(fromUserId)
                 .SendAsync("chatRequestRejected");
+
+      
     }
+
+
 }
