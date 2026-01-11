@@ -28,5 +28,11 @@ namespace ChatApp.Domain.Entities
         public MessageStatus Status { get; set; } = MessageStatus.Sent;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Voice note properties
+        public bool IsVoiceNote { get; set; } = false;
+        public string? VoiceNoteUrl { get; set; }
+        public double? VoiceNoteDuration { get; set; }
+        public string? VoiceNoteWaveform { get; set; } // JSON array of amplitudes
     }
 }

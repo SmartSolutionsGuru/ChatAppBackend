@@ -50,6 +50,12 @@ namespace ChatApp.Infrastructure.Repositories
                 .Take(20)
                 .ToListAsync();
         }
+
+        public async Task<string?> GetUserNameByIdAsync(string userId)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user?.UserName;
+        }
     }
 
 }

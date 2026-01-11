@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ChatApp.Application.Features.Chat.Queries.SendMessage
@@ -53,7 +54,13 @@ namespace ChatApp.Application.Features.Chat.Queries.SendMessage
                 SenderId = senderId,
                 ReceiverId = receiverId,
                 Content = request.Content,
-                Status = MessageStatus.Sent
+                Status = MessageStatus.Sent,
+                IsVoiceNote = request.IsVoiceNote,
+                VoiceNoteUrl = request.VoiceNoteUrl,
+                VoiceNoteDuration = request.VoiceNoteDuration,
+                VoiceNoteWaveform = request.VoiceNoteWaveform != null 
+                    ? JsonSerializer.Serialize(request.VoiceNoteWaveform) 
+                    : null
             };
 
             await _messages.AddAsync(message);
@@ -66,7 +73,11 @@ namespace ChatApp.Application.Features.Chat.Queries.SendMessage
                 receiverId,
                 message.Content,
                 message.CreatedAt,
-                message.Status
+                message.Status,
+                message.IsVoiceNote,
+                message.VoiceNoteUrl,
+                message.VoiceNoteDuration,
+                request.VoiceNoteWaveform
             );
 
             return message.Id;

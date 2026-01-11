@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ChatApp.Application.Features.Chat.Queries.GetChatMessages
 {
     public class GetChatMessagesHandler
-    : IRequestHandler<GetChatMessagesQuery, List<MessageDto>>
+    : IRequestHandler<GetChatMessagesQuery, PaginatedMessagesDto>
     {
         private readonly IMessageRepository _repo;
         private readonly ICurrentUserService _currentUser;
@@ -23,13 +23,15 @@ namespace ChatApp.Application.Features.Chat.Queries.GetChatMessages
             _currentUser = currentUser;
         }
 
-        public Task<List<MessageDto>> Handle(
+        public Task<PaginatedMessagesDto> Handle(
             GetChatMessagesQuery request,
             CancellationToken ct)
         {
             return _repo.GetChatMessagesAsync(
                 request.ChatId,
-                _currentUser.UserId);
+                _currentUser.UserId,
+                request.PageSize,
+                request.BeforeMessageId);
         }
     }
 

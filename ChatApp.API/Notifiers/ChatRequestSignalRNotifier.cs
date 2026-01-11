@@ -18,16 +18,16 @@ namespace ChatApp.API.Notifiers
             => _hub.Clients.User(toUserId)
                 .SendAsync("chatRequestReceived", requestId);
 
-        public Task NotifyRequestAccepted(string fromUserId, long chatId)
+        public Task NotifyRequestAccepted(string fromUserId, long chatId, string acceptedByUserId, string acceptedByUserName)
             => _hub.Clients.User(fromUserId)
-                .SendAsync("chatRequestAccepted", chatId);
+                .SendAsync("chatRequestAccepted", new { chatId, acceptedByUserId, acceptedByUserName });
 
         public Task NotifyRequestRejected(string fromUserId)
             => _hub.Clients.User(fromUserId)
                 .SendAsync("chatRequestRejected");
 
-      
+        public Task NotifyChatCreated(string toUserId, long chatId, string otherUserId, string otherUserName)
+            => _hub.Clients.User(toUserId)
+                .SendAsync("chatCreated", new { chatId, otherUserId, otherUserName });
     }
-
-
 }

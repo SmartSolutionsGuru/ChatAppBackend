@@ -20,7 +20,11 @@ namespace ChatApp.Application.Interfaces
             string receiverId,
             string content,
             DateTime createdAt,
-            MessageStatus status);
-        Task NotifyMessageDelivered(long chatId, long messageId);
+            MessageStatus status,
+            bool isVoiceNote = false,
+            string? voiceNoteUrl = null,
+            double? voiceNoteDuration = null,
+            double[]? voiceNoteWaveform = null);
+        Task NotifyMessageDelivered(long chatId, long messageId, string senderId);
     }
 }

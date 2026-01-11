@@ -51,7 +51,8 @@ namespace ChatApp.Application.Features.Chat.Queries.DeliverMessage
             // notify sender (all tabs)
             await _notifier.NotifyMessageDelivered(
                 message.ChatId,
-                message.Id
+                message.Id,
+                message.SenderId
             );
         }
     }

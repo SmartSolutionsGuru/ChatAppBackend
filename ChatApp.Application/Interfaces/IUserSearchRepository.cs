@@ -12,5 +12,6 @@ namespace ChatApp.Application.Interfaces
         Task<List<UserSearchItemDto>> SearchAsync(
             string currentUserId,
             string term);
+        Task<string?> GetUserNameByIdAsync(string userId);
     }
 }

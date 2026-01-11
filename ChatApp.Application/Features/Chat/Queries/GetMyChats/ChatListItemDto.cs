@@ -13,6 +13,7 @@ namespace ChatApp.Application.Features.Chat.Queries.GetMyChats
         public string OtherUserName { get; set; } = default!;
         public string? LastMessage { get; set; }
         public DateTime? LastMessageAt { get; set; }
+        public int UnreadCount { get; set; }
     }
 
 }

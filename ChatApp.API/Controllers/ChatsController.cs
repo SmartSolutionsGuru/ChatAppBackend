@@ -1,6 +1,7 @@
 ﻿using ChatApp.Application.Features.Chat.Queries.GetChatMessages;
 using ChatApp.Application.Features.Chat.Queries.GetMyChats;
 using ChatApp.Application.Features.Chat.Queries.SendMessage;
+using ChatApp.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,13 @@ namespace ChatApp.API.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMessageRepository _messageRepo;
 
-        public ChatsController(IMediator mediator)
-            => _mediator = mediator;
+        public ChatsController(IMediator mediator, IMessageRepository messageRepo)
+        {
+            _mediator = mediator;
+            _messageRepo = messageRepo;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetMyChats()
@@ -26,12 +31,28 @@ namespace ChatApp.API.Controllers
         }
 
         [HttpGet("{chatId}/messages")]
-        public async Task<IActionResult> GetMessages(long chatId)
+        public async Task<IActionResult> GetMessages(
+            long chatId,
+            [FromQuery] int pageSize = 30,
+            [FromQuery] long? beforeMessageId = null)
         {
-            var messages = await _mediator.Send(
-                new GetChatMessagesQuery(chatId));
+            var result = await _mediator.Send(
+                new GetChatMessagesQuery(chatId, pageSize, beforeMessageId));
 
-            return Ok(messages);
+            return Ok(result);
+        }
+
+        [HttpGet("{chatId}/messages/search")]
+        public async Task<IActionResult> SearchMessages(
+            long chatId,
+            [FromQuery] string q,
+            [FromQuery] int maxResults = 50)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(new List<MessageDto>());
+
+            var results = await _messageRepo.SearchMessagesAsync(chatId, q, maxResults);
+            return Ok(results);
         }
 
         [HttpPost]

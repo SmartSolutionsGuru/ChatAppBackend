@@ -10,17 +10,20 @@ public class RespondChatRequestHandler
     private readonly IChatRepository _chats;
     private readonly ICurrentUserService _currentUser;
     private readonly IChatRequestNotifier _notifier;
+    private readonly IUserSearchRepository _users;
 
     public RespondChatRequestHandler(
         IChatRequestRepository requests,
         IChatRepository chats,
         ICurrentUserService currentUser,
-        IChatRequestNotifier notifier)
+        IChatRequestNotifier notifier,
+        IUserSearchRepository users)
     {
         _requests = requests;
         _chats = chats;
         _currentUser = currentUser;
         _notifier = notifier;
+        _users = users;
     }
 
     public async Task<long?> Handle(
@@ -56,9 +59,23 @@ public class RespondChatRequestHandler
         await _requests.SaveChangesAsync();
         await _chats.SaveChangesAsync();
 
+        // Get usernames for notifications
+        var acceptedByUserName = await _users.GetUserNameByIdAsync(userId) ?? "User";
+        var fromUserName = await _users.GetUserNameByIdAsync(chatRequest.FromUserId) ?? "User";
+
+        // Notify the original sender that their request was accepted
         await _notifier.NotifyRequestAccepted(
             chatRequest.FromUserId,
-            chat.Id);
+            chat.Id,
+            userId,
+            acceptedByUserName);
+
+        // Notify the accepter about the new chat (for their sidebar)
+        await _notifier.NotifyChatCreated(
+            userId,
+            chat.Id,
+            chatRequest.FromUserId,
+            fromUserName);
 
         return chat.Id; // ✅ RETURN
     }

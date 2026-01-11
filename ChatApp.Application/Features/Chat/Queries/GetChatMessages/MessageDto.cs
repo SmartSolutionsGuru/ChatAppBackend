@@ -12,7 +12,13 @@ namespace ChatApp.Application.Features.Chat.Queries.GetChatMessages
         public string SenderId { get; set; } = default!;
         public string Content { get; set; } = default!;
         public DateTime CreatedAt { get; set; }
-        public string Status { get; set; } = default!;
+        public int Status { get; set; }
+
+        // Voice note properties
+        public bool IsVoiceNote { get; set; }
+        public string? VoiceNoteUrl { get; set; }
+        public double? VoiceNoteDuration { get; set; }
+        public double[]? VoiceNoteWaveform { get; set; }
     }
 
 }

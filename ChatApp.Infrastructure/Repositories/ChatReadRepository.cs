@@ -38,7 +38,9 @@ namespace ChatApp.Infrastructure.Repositories
                     LastMessageAt = c.Messages
                         .OrderByDescending(m => m.CreatedAt)
                         .Select(m => m.CreatedAt)
-                        .FirstOrDefault()
+                        .FirstOrDefault(),
+                    UnreadCount = c.Messages
+                        .Count(m => m.ReceiverId == userId && m.Status != Domain.Entities.MessageStatus.Read)
                 }
             )
             .OrderByDescending(x => x.LastMessageAt)

@@ -29,5 +29,8 @@ namespace ChatApp.API.Presence
 
         public bool IsOnline(string userId)
             => _connections.ContainsKey(userId);
+
+        public IEnumerable<string> GetOnlineUserIds()
+            => _connections.Keys.ToList();
     }
 }

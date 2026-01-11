@@ -19,7 +19,11 @@ namespace ChatApp.API.Notifiers
             string receiverId,
             string content,
             DateTime createdAt,
-            MessageStatus status)
+            MessageStatus status,
+            bool isVoiceNote = false,
+            string? voiceNoteUrl = null,
+            double? voiceNoteDuration = null,
+            double[]? voiceNoteWaveform = null)
         {
             var payload = new
             {
@@ -29,7 +33,11 @@ namespace ChatApp.API.Notifiers
                 receiverId,
                 content,
                 createdAt,
-                status = status.ToString()
+                status = (int)status,
+                isVoiceNote,
+                voiceNoteUrl,
+                voiceNoteDuration,
+                voiceNoteWaveform
             };
 
             await _hub.Clients.User(senderId)
@@ -54,10 +62,11 @@ namespace ChatApp.API.Notifiers
 
         public async Task NotifyMessageDelivered(
         long chatId,
-        long messageId)
+        long messageId,
+        string senderId)
         {
             await _hub.Clients
-                .Group(chatId.ToString())
+                .User(senderId)
                 .SendAsync("messageDelivered", new
                 {
                     chatId,

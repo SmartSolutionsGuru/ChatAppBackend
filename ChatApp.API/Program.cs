@@ -5,6 +5,7 @@ using ChatApp.Application.Features.ChatRequests.Commands.SendChatRequest;
 using ChatApp.Application.Interfaces;
 using ChatApp.Infrastructure;
 using ChatApp.Infrastructure.Identity;
+using ChatApp.Infrastructure.Repositories;
 using ChatApp.Infrastructure.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -20,6 +21,7 @@ cfg.RegisterServicesFromAssembly(typeof(SendChatRequestCommand).Assembly));
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<UserConnectionTracker>();
 builder.Services.AddScoped<IChatRequestNotifier, ChatRequestSignalRNotifier>();
+builder.Services.AddScoped<IUserPresenceRepository, UserPresenceRepository>();
 builder.Services.AddScoped<IMessageNotifier, MessageSignalRNotifier>();
 builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
 builder.Services.AddCors(options =>
@@ -37,7 +39,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors("AllowAngularDev");
 app.UseAuthentication();
 app.UseAuthorization();
