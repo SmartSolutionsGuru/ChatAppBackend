@@ -19,6 +19,7 @@ namespace ChatApp.Infrastructure.Persistence
         public DbSet<Message> Messages => Set<Message>();
         public DbSet<ChatRequest> ChatRequests => Set<ChatRequest>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        public DbSet<CallRecord> CallRecords => Set<CallRecord>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -61,6 +62,26 @@ namespace ChatApp.Infrastructure.Persistence
                 e.Property(x => x.UserId).IsRequired();
                 e.Property(x => x.Token).IsRequired().HasMaxLength(200);
                 e.HasIndex(x => x.Token).IsUnique();
+            });
+
+            builder.Entity<CallRecord>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.CallId).IsRequired();
+                e.Property(x => x.CallerId).IsRequired();
+                e.Property(x => x.ReceiverId).IsRequired();
+                
+                e.HasOne(x => x.Chat)
+                 .WithMany()
+                 .HasForeignKey(x => x.ChatId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                // Index for quick lookups by CallId (GUID)
+                e.HasIndex(x => x.CallId).IsUnique();
+                
+                // Index for call history queries
+                e.HasIndex(x => new { x.CallerId, x.InitiatedAt });
+                e.HasIndex(x => new { x.ReceiverId, x.InitiatedAt });
             });
 
 

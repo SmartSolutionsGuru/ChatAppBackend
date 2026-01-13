@@ -19,6 +19,12 @@ namespace ChatApp.Application.Features.Chat.Queries.GetChatMessages
         public string? VoiceNoteUrl { get; set; }
         public double? VoiceNoteDuration { get; set; }
         public double[]? VoiceNoteWaveform { get; set; }
+
+        // Call message properties (WhatsApp-style)
+        public bool IsCallMessage { get; set; }
+        public string? CallType { get; set; }       // "audio" or "video"
+        public int? CallDuration { get; set; }      // Duration in seconds
+        public string? CallStatus { get; set; }     // "completed", "missed", "rejected"
     }
 
 }

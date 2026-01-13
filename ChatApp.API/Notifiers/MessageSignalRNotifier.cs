@@ -73,5 +73,44 @@ namespace ChatApp.API.Notifiers
                     messageId
                 });
         }
+
+        public async Task NotifyMessageReceivedAsync(
+            long chatId,
+            long messageId,
+            string senderId,
+            string content,
+            DateTime createdAt,
+            int status,
+            bool isVoiceNote,
+            string? voiceNoteUrl,
+            double? voiceNoteDuration,
+            double[]? voiceNoteWaveform,
+            bool isCallMessage = false,
+            string? callType = null,
+            int? callDuration = null,
+            string? callStatus = null)
+        {
+            var payload = new
+            {
+                messageId,
+                chatId,
+                senderId,
+                content,
+                createdAt,
+                status,
+                isVoiceNote,
+                voiceNoteUrl,
+                voiceNoteDuration,
+                voiceNoteWaveform,
+                isCallMessage,
+                callType,
+                callDuration,
+                callStatus
+            };
+
+            // Send to all users in the chat group
+            await _hub.Clients.Group(chatId.ToString())
+                .SendAsync("messageReceived", payload);
+        }
     }
 }

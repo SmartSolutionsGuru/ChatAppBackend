@@ -1,5 +1,6 @@
-﻿using ChatApp.API.Presence;
+﻿using ChatApp.Application.Features.Users.Queries.GetOnlineUsers;
 using ChatApp.Application.Features.Users.Queries.SearchUsers;
+using ChatApp.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +14,9 @@ namespace ChatApp.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly UserConnectionTracker _tracker;
+        private readonly IUserConnectionTracker _tracker;
 
-        public UsersController(IMediator mediator, UserConnectionTracker tracker)
+        public UsersController(IMediator mediator, IUserConnectionTracker tracker)
         {
             _mediator = mediator;
             _tracker = tracker;
@@ -32,9 +33,9 @@ namespace ChatApp.API.Controllers
         }
 
         [HttpGet("online")]
-        public IActionResult GetOnlineUsers()
+        public async Task<IActionResult> GetOnlineUsers()
         {
-            var onlineUserIds = _tracker.GetOnlineUserIds();
+            var onlineUserIds = await _mediator.Send(new GetOnlineUsersQuery());
             return Ok(onlineUserIds);
         }
 

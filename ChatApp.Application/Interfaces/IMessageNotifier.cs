@@ -26,5 +26,22 @@ namespace ChatApp.Application.Interfaces
             double? voiceNoteDuration = null,
             double[]? voiceNoteWaveform = null);
         Task NotifyMessageDelivered(long chatId, long messageId, string senderId);
+        
+        // Notify about a message including call message fields
+        Task NotifyMessageReceivedAsync(
+            long chatId,
+            long messageId,
+            string senderId,
+            string content,
+            DateTime createdAt,
+            int status,
+            bool isVoiceNote,
+            string? voiceNoteUrl,
+            double? voiceNoteDuration,
+            double[]? voiceNoteWaveform,
+            bool isCallMessage = false,
+            string? callType = null,
+            int? callDuration = null,
+            string? callStatus = null);
     }
 }

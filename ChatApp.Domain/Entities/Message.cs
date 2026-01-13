@@ -13,6 +13,13 @@ namespace ChatApp.Domain.Entities
         Read = 3
     }
 
+    public enum CallMessageStatus
+    {
+        Completed = 1,  // Call was answered and ended normally
+        Missed = 2,     // Receiver didn't answer
+        Rejected = 3    // Receiver declined the call
+    }
+
     public class Message
     {
         public long Id { get; set; }
@@ -34,5 +41,11 @@ namespace ChatApp.Domain.Entities
         public string? VoiceNoteUrl { get; set; }
         public double? VoiceNoteDuration { get; set; }
         public string? VoiceNoteWaveform { get; set; } // JSON array of amplitudes
+
+        // Call message properties (WhatsApp-style call records in chat)
+        public bool IsCallMessage { get; set; } = false;
+        public CallType? CallType { get; set; }
+        public int? CallDuration { get; set; }  // Duration in seconds
+        public CallMessageStatus? CallStatus { get; set; }
     }
 }

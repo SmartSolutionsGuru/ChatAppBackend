@@ -49,7 +49,11 @@ namespace ChatApp.Infrastructure.Repositories
                     m.IsVoiceNote,
                     m.VoiceNoteUrl,
                     m.VoiceNoteDuration,
-                    m.VoiceNoteWaveform
+                    m.VoiceNoteWaveform,
+                    m.IsCallMessage,
+                    m.CallType,
+                    m.CallDuration,
+                    m.CallStatus
                 })
                 .ToListAsync();
 
@@ -74,7 +78,12 @@ namespace ChatApp.Infrastructure.Repositories
                 VoiceNoteDuration = m.VoiceNoteDuration,
                 VoiceNoteWaveform = string.IsNullOrEmpty(m.VoiceNoteWaveform)
                     ? null
-                    : JsonSerializer.Deserialize<double[]>(m.VoiceNoteWaveform)
+                    : JsonSerializer.Deserialize<double[]>(m.VoiceNoteWaveform),
+                // Call message fields
+                IsCallMessage = m.IsCallMessage,
+                CallType = m.CallType.HasValue ? (m.CallType == Domain.Entities.CallType.Video ? "video" : "audio") : null,
+                CallDuration = m.CallDuration,
+                CallStatus = m.CallStatus.HasValue ? m.CallStatus.Value.ToString().ToLower() : null
             }).ToList();
 
             return new PaginatedMessagesDto

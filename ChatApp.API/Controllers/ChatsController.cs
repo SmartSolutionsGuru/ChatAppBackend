@@ -1,7 +1,7 @@
 ﻿using ChatApp.Application.Features.Chat.Queries.GetChatMessages;
 using ChatApp.Application.Features.Chat.Queries.GetMyChats;
+using ChatApp.Application.Features.Chat.Queries.SearchMessages;
 using ChatApp.Application.Features.Chat.Queries.SendMessage;
-using ChatApp.Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +15,10 @@ namespace ChatApp.API.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMessageRepository _messageRepo;
 
-        public ChatsController(IMediator mediator, IMessageRepository messageRepo)
+        public ChatsController(IMediator mediator)
         {
             _mediator = mediator;
-            _messageRepo = messageRepo;
         }
 
         [HttpGet]
@@ -48,10 +46,9 @@ namespace ChatApp.API.Controllers
             [FromQuery] string q,
             [FromQuery] int maxResults = 50)
         {
-            if (string.IsNullOrWhiteSpace(q))
-                return Ok(new List<MessageDto>());
+            var results = await _mediator.Send(
+                new SearchMessagesQuery(chatId, q, maxResults));
 
-            var results = await _messageRepo.SearchMessagesAsync(chatId, q, maxResults);
             return Ok(results);
         }
 

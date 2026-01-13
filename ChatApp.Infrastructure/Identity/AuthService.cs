@@ -1,4 +1,5 @@
-﻿using ChatApp.Application.Interfaces;
+﻿using ChatApp.Application.DTOs.Auth;
+using ChatApp.Application.Interfaces;
 using ChatApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
-﻿using ChatApp.Application.Interfaces;
+﻿using ChatApp.Application.DTOs.Auth;
+using ChatApp.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.API.Controllers;
@@ -32,7 +33,3 @@ public class AuthController : ControllerBase
         return Ok(res);
     }
 }
-
-public record RegisterRequest(string Email, string Password, string? DisplayName);
-public record LoginRequest(string Email, string Password);
-public record RefreshRequest(string RefreshToken);
